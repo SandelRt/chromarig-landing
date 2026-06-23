@@ -2,9 +2,38 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { ChromaRigScene } from "./ChromaRigScene"
-import { PaletteMode, createPalette, marketplaceLinks, walkthroughSteps } from "../lib/chromarig"
+import { PaletteMode, createPalette, marketplaceLinks, productMedia, walkthroughSteps } from "../lib/chromarig"
 
 const paletteModes: PaletteMode[] = ["Triadic", "Complementary", "Analogous", "Theme"]
+
+function getYoutubeEmbedUrl(url: string) {
+  if (!url.trim()) return ""
+
+  try {
+    const parsed = new URL(url)
+    const host = parsed.hostname.replace(/^www\./, "")
+
+    if (host === "youtu.be") {
+      const videoId = parsed.pathname.split("/").filter(Boolean)[0]
+      return videoId ? `https://www.youtube.com/embed/${videoId}` : ""
+    }
+
+    if (host === "youtube.com" || host === "m.youtube.com") {
+      if (parsed.pathname.startsWith("/embed/")) return parsed.toString()
+      if (parsed.pathname.startsWith("/shorts/")) {
+        const videoId = parsed.pathname.split("/").filter(Boolean)[1]
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : ""
+      }
+
+      const videoId = parsed.searchParams.get("v")
+      return videoId ? `https://www.youtube.com/embed/${videoId}` : ""
+    }
+  } catch {
+    return ""
+  }
+
+  return ""
+}
 
 export function ChromaRigLanding() {
   const [baseColor, setBaseColor] = useState("#22f59f")
@@ -26,6 +55,7 @@ export function ChromaRigLanding() {
   const palette = useMemo(() => createPalette(baseColor, paletteMode), [baseColor, paletteMode])
   const currentStep = walkthroughSteps[activeStep]
   const sceneState = generated ? "result" : currentStep.sceneState
+  const youtubeEmbedUrl = getYoutubeEmbedUrl(productMedia.youtubeUrl)
 
   function goToStep(index: number) {
     setActiveStep(index)
@@ -94,6 +124,7 @@ export function ChromaRigLanding() {
           </a>
           <div className="nav-links">
             <a href="#preview">Interactive Preview</a>
+            <a href="#demo">Demo Media</a>
             <a href="#how-it-works">How It Works</a>
             <a href="#marketplaces">Buy Links</a>
           </div>
@@ -252,6 +283,53 @@ export function ChromaRigLanding() {
               <span>{generated ? `${lightCount} CR_ lights previewed with safe target behavior.` : currentStep.detail}</span>
             </div>
           </section>
+        </div>
+      </section>
+
+      <section className="media-band" id="demo" aria-labelledby="demo-title">
+        <div className="media-heading">
+          <p className="eyebrow">See it before you buy</p>
+          <h2 id="demo-title">Actual UI preview plus demo video.</h2>
+          <p>
+            The browser simulation shows the idea. This section shows the real Blender panel and leaves a ready slot
+            for the YouTube walkthrough once the final video link is available.
+          </p>
+        </div>
+
+        <div className="media-grid">
+          <article className="video-card" aria-labelledby="video-title">
+            <div className="card-kicker">Video walkthrough</div>
+            <h3 id="video-title">{productMedia.youtubeTitle}</h3>
+            {youtubeEmbedUrl ? (
+              <iframe
+                src={youtubeEmbedUrl}
+                title={productMedia.youtubeTitle}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+            ) : (
+              <div className="video-placeholder" role="img" aria-label="YouTube demo video placeholder">
+                <strong>YouTube demo slot ready</strong>
+                <span>Add the final YouTube URL in the product media config and this becomes an embedded walkthrough.</span>
+              </div>
+            )}
+          </article>
+
+          <figure className="ui-preview-card">
+            <div className="card-kicker">Real Blender UI</div>
+            <img
+              src={productMedia.uiPreviewImage}
+              alt={productMedia.uiPreviewAlt}
+              width="296"
+              height="876"
+              loading="lazy"
+            />
+            <figcaption>
+              Actual ChromaRig panel preview showing Quick Start, guided Color Source, Click To Preview, and Palette Preview.
+            </figcaption>
+          </figure>
         </div>
       </section>
 

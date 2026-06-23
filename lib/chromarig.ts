@@ -46,6 +46,14 @@ export const marketplaceLinks = [
   { label: "Blender Extensions", href: "", status: "coming-soon" },
 ]
 
+export const productMedia = {
+  uiPreviewImage: "/chromarig-ui-preview.png",
+  uiPreviewAlt:
+    "ChromaRig Blender sidebar showing Quick Start, Color Source, Click To Preview, and Palette Preview controls.",
+  youtubeUrl: "",
+  youtubeTitle: "ChromaRig demo walkthrough",
+}
+
 export const presetTheme = ["#40f59b", "#5fb8ff", "#ffb047", "#ff5a7d"]
 
 function clamp(value: number, min: number, max: number) {
