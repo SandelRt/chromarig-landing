@@ -50,7 +50,7 @@ export const productMedia = {
   uiPreviewImage: "/chromarig-ui-preview.png",
   uiPreviewAlt:
     "ChromaRig Blender sidebar showing Quick Start, Color Source, Click To Preview, and Palette Preview controls.",
-  youtubeUrl: "",
+  youtubeUrl: "https://youtu.be/054NPm502sU",
   youtubeTitle: "ChromaRig demo walkthrough",
 }
 
