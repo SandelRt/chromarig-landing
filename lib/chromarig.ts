@@ -41,6 +41,7 @@ export const walkthroughSteps: WalkthroughStep[] = [
 
 export const marketplaceLinks = [
   { label: "Gumroad", href: "https://lemniguru.gumroad.com/l/tvcooa", status: "live" },
+  { label: "itch.io", href: "https://lemniloop-studio.itch.io/chromarig", status: "live" },
   { label: "Superhive", href: "", status: "coming-soon" },
   { label: "Blender Market", href: "", status: "coming-soon" },
   { label: "Blender Extensions", href: "", status: "coming-soon" },
